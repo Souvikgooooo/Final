@@ -1,6 +1,8 @@
 // src/components/SignUpForm.tsx
 import React, { useState } from 'react';
 import { User, Phone, Mail, Lock, CheckCircle } from 'lucide-react'; // Importing icons
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
+import { useUser } from '../context/UserContext'; // Import user context
 
 interface FormData {
   name: string;
@@ -19,6 +21,9 @@ interface SignUpFormProps {
 }
 
 const SignUpForm: React.FC<SignUpFormProps> = ({ role, onBack, onClose }) => {
+  const navigate = useNavigate(); // Initialize the navigate function
+  const { setUser } = useUser(); // Get setUser function from context
+  
   const [formData, setFormData] = useState<FormData>({
     name: '',
     phoneNumber: '',
@@ -34,9 +39,36 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ role, onBack, onClose }) => {
     setFormData(prevState => ({ ...prevState, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log(formData);
+    
+    try {
+      // Here you would typically make an API call to register the user
+      // For now, we'll just simulate successful registration
+      
+      const userData = {
+        ...formData,
+        // Convert role to the expected type format in the UserContext
+        type: role === 'serviceProvider' ? 'serviceprovider' : 'customer'
+      };
+      
+      // Set user in context (which also saves to localStorage)
+      setUser(userData);
+      
+      // Redirect based on role
+      if (role === 'customer') {
+        navigate('/customer'); // Redirect to customer dashboard
+      } else if (role === 'serviceProvider') {
+        navigate('/serviceprovider'); // Redirect to service provider dashboard
+      }
+      
+      // Close the signup modal
+      onClose();
+    } catch (error) {
+      console.error('Registration error:', error);
+      // Handle registration error (show message to user)
+    }
   };
 
   return (

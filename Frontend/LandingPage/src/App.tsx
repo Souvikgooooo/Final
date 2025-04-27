@@ -1,5 +1,6 @@
 // src/App.tsx
 import React, { useState } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { Car, GraduationCap, Home, Lightbulb, Scissors, Wrench } from 'lucide-react';
 import SignUp from './components/SignUp';
 import Navbar from './components/Navbar';
@@ -9,10 +10,13 @@ import Services from './components/Services'; // Import the Services component
 import Blog from './components/Blog';
 import Contact from './components/Contact';
 import Login from './components/Login';
-function App() {
-  const [isSignUpOpen, setSignUpOpen] = useState(false);
-  const [isLoginOpen, setLoginOpen] = useState(false);
 
+interface LandingPageContentProps {
+  onLoginClick: () => void;
+  onSignUpClick: () => void;
+}
+
+function LandingPageContent({ onLoginClick, onSignUpClick }: LandingPageContentProps) {
   const services = [
     {
       title: 'House Keeping',
@@ -56,8 +60,8 @@ function App() {
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 to-sky-50">
       {/* Navbar with onLoginClick and onSignUpClick */}
       <Navbar 
-        onLoginClick={() => setLoginOpen(true)} 
-        onSignUpClick={() => setSignUpOpen(true)} 
+        onLoginClick={onLoginClick} 
+        onSignUpClick={onSignUpClick} 
       />
       
       {/* Main Content Sections */}
@@ -66,13 +70,38 @@ function App() {
       <div id="services"><Services services={services} /></div> {/* Pass services here */}
       <Blog />
       <Contact />
-  
-      {/* SignUp Modal */}
-      {isSignUpOpen && <SignUp onClose={() => setSignUpOpen(false)} />}
-      
-      {/* Login Modal */}
-      {isLoginOpen && <Login onClose={() => setLoginOpen(false)} />}
     </div>
+  );
+}
+
+function App() {
+  const [isSignUpOpen, setSignUpOpen] = useState(false);
+  const [isLoginOpen, setLoginOpen] = useState(false);
+
+  return (
+    <Routes>
+      <Route 
+        path="/" 
+        element={
+          <>
+            <LandingPageContent 
+              onLoginClick={() => setLoginOpen(true)} 
+              onSignUpClick={() => setSignUpOpen(true)} 
+            />
+            {isSignUpOpen && <SignUp onClose={() => setSignUpOpen(false)} />}
+            {isLoginOpen && <Login onClose={() => setLoginOpen(false)} />}
+          </>
+        } 
+      />
+      <Route 
+        path="/customer/*" 
+        element={<Navigate to="/customer" replace />} 
+      />
+      <Route 
+        path="/serviceprovider/*" 
+        element={<Navigate to="/serviceprovider" replace />} 
+      />
+    </Routes>
   );
 }
 
