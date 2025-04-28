@@ -58,9 +58,9 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ role, onBack, onClose }) => {
       
       // Redirect based on role
       if (role === 'customer') {
-        window.location.href = 'http://localhost:8083/'; // Redirect to customer dashboard
+        window.location.href = 'http://localhost:8080/'; // Redirect to customer dashboard
       } else if (role === 'serviceProvider') {
-        window.location.href = 'http://localhost:8084/'; // Redirect to service provider dashboard
+        window.location.href = 'http://localhost:8081/'; // Redirect to service provider dashboard
       }
       
       // Close the signup modal
