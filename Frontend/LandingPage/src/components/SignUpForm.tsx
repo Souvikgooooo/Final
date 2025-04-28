@@ -50,7 +50,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ role, onBack, onClose }) => {
       const userData = {
         ...formData,
         // Convert role to the expected type format in the UserContext
-        type: role === 'serviceProvider' ? 'serviceprovider' : 'customer'
+        type: (role === 'serviceProvider' ? 'serviceprovider' : 'customer') as 'customer' | 'serviceprovider'
       };
       
       // Set user in context (which also saves to localStorage)
@@ -58,9 +58,9 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ role, onBack, onClose }) => {
       
       // Redirect based on role
       if (role === 'customer') {
-        navigate('/customer'); // Redirect to customer dashboard
+        window.location.href = 'http://localhost:8083/'; // Redirect to customer dashboard
       } else if (role === 'serviceProvider') {
-        navigate('/serviceprovider'); // Redirect to service provider dashboard
+        window.location.href = 'http://localhost:8084/'; // Redirect to service provider dashboard
       }
       
       // Close the signup modal
