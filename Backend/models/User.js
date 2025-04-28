@@ -27,19 +27,19 @@ const userSchema = new mongoose.Schema({
     enum: ['customer', 'provider'],
     required: true
   },
-  location: {
-    type: {
-      type: String,
-      default: 'Point',
-      enum: ['Point']
-    },
-    coordinates: [Number]
-  },
+  // location: { // Commented out to temporarily disable geolocation
+  //   type: {
+  //     type: String,
+  //     default: 'Point',
+  //     enum: ['Point']
+  //   },
+  //   coordinates: [Number]
+  // },
   address: String
 });
 
-// Geospatial index for location-based queries
-userSchema.index({ location: '2dsphere' });
+// Geospatial index for location-based queries - Commented out
+// userSchema.index({ location: '2dsphere' });
 
 // Password hashing middleware
 userSchema.pre('save', async function(next) {

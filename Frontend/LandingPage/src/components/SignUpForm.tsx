@@ -1,17 +1,21 @@
 // src/components/SignUpForm.tsx
 import React, { useState } from 'react';
 import { User, Phone, Mail, Lock, CheckCircle } from 'lucide-react'; // Importing icons
+import axios from 'axios'; // Import axios
 import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
 import { useUser } from '../context/UserContext'; // Import user context
 
 interface FormData {
   name: string;
-  phoneNumber: string;
+  phone_number: string;
   email: string;
   password: string;
   service?: string; // Only for service provider
   experience?: string; // Only for service provider
   tradeLicense?: string; // Only for service provider
+  location_latitude: string;
+  location_longitude: string;
+  address: string;
 }
 
 interface SignUpFormProps {
@@ -26,12 +30,15 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ role, onBack, onClose }) => {
   
   const [formData, setFormData] = useState<FormData>({
     name: '',
-    phoneNumber: '',
+    phone_number: '',
     email: '',
     password: '',
     service: '',
     experience: '',
-    tradeLicense: ''
+    tradeLicense: '',
+    location_latitude: '0',
+    location_longitude: '0',
+    address: ''
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -40,34 +47,52 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ role, onBack, onClose }) => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log(formData);
-    
-    try {
-      // Here you would typically make an API call to register the user
-      // For now, we'll just simulate successful registration
-      
+    e.preventDefault(); // Prevent default form submission
+    console.log('handleSubmit called');
+      console.log(formData);
+
+      try {
+        const response = await axios.post('http://localhost:8000/api/auth/register', {
+          name: formData.name,
+          phone_number: formData.phone_number,
+          email: formData.email,
+          password: formData.password,
+          role: role === 'serviceProvider' ? 'provider' : role, // Send the role to the backend, mapping 'serviceProvider' to 'provider'
+          address: formData.address,
+          // Include service provider specific fields if applicable
+          ...(role === 'serviceProvider' && {
+            service: formData.service,
+            experience: formData.experience,
+            tradeLicense: formData.tradeLicense,
+          }),
+        });
+
+        console.log('Registration successful:', response.data);
+
+      // Assuming the backend returns user data on successful signup
       const userData = {
-        ...formData,
-        // Convert role to the expected type format in the UserContext
-        type: (role === 'serviceProvider' ? 'serviceprovider' : 'customer') as 'customer' | 'serviceprovider'
+        ...response.data.user, // Use user data from the backend response
+        type: (role === 'serviceProvider' ? 'serviceprovider' : 'customer') as 'customer' | 'serviceprovider' // Ensure type is correct for context
       };
-      
+
       // Set user in context (which also saves to localStorage)
       setUser(userData);
-      
+
       // Redirect based on role
       if (role === 'customer') {
         window.location.href = 'http://localhost:8080/'; // Redirect to customer dashboard
       } else if (role === 'serviceProvider') {
         window.location.href = 'http://localhost:8081/'; // Redirect to service provider dashboard
       }
-      
-      // Close the signup modal
-      onClose();
+
+      onClose(); // Close the modal on successful signup and redirection
     } catch (error) {
       console.error('Registration error:', error);
       // Handle registration error (show message to user)
+      if (axios.isAxiosError(error) && error.response) {
+        console.error('Error details:', error.response.data);
+        // You might want to display error.response.data.message to the user
+      }
     }
   };
 
@@ -97,9 +122,9 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ role, onBack, onClose }) => {
             <Phone className="w-6 h-6 text-gray-600" />
             <input
               type="text"
-              name="phoneNumber"
+              name="phone_number"
               placeholder="Phone Number"
-              value={formData.phoneNumber}
+              value={formData.phone_number}
               onChange={handleChange}
               className="w-full pl-3 text-gray-700 focus:outline-none"
             />

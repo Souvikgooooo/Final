@@ -12,20 +12,11 @@ exports.register = catchAsync(async (req, res, next) => {
     password,
     phone_number,
     role,
-    location_latitude,
-    location_longitude,
-    address
   } = req.body;
 
   // Validate required fields
-  if (!name || !email || !password || !phone_number || !role ||
-    !location_latitude || !location_longitude || !address) {
+  if (!name || !email || !password || !phone_number || !role) {
     return next(new AppError('Please provide all required fields', 400));
-  }
-
-  // Validate coordinates
-  if (isNaN(location_latitude) || isNaN(location_longitude)) {
-    return next(new AppError('Invalid coordinates', 400));
   }
 
   // Validate role
@@ -46,11 +37,6 @@ exports.register = catchAsync(async (req, res, next) => {
     password,
     phone_number,
     role,
-    location: {
-      type: 'Point',
-      coordinates: [parseFloat(location_longitude), parseFloat(location_latitude)]
-    },
-    address
   });
 
   // Remove password from output
