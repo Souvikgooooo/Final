@@ -21,6 +21,11 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 // Create a provider component
 export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  try {
+  } catch (error) {
+    console.error("Error in useState:", error);
+  }
+  console.log("UserProvider rendered");
 
   // Load user from localStorage on initial render
   useEffect(() => {
@@ -31,7 +36,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       } catch (error) {
         console.error('Error parsing stored user:', error);
         localStorage.removeItem('user');
-      }
+      } 
     }
   }, []);
 
@@ -63,4 +68,4 @@ export const useUser = (): UserContextType => {
     throw new Error('useUser must be used within a UserProvider');
   }
   return context;
-}; 
+};
