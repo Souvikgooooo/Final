@@ -54,10 +54,10 @@ const About = () => {
           <div>
             <h2 className="text-4xl font-bold text-gray-900 leading-tight">
               Transforming Service
-              <span className="block text-emerald-600">Delivery Excellence</span>
+              <span className="block text-primary">Delivery Excellence</span>
             </h2>
             <p className="mt-6 text-lg text-gray-600">
-              At LSP, we're committed to revolutionizing how services are delivered. Our platform connects you with trusted professionals who are passionate about delivering exceptional service experiences.
+              At ThrivePro, we're committed to revolutionizing how services are delivered. Our platform connects you with trusted professionals who are passionate about delivering exceptional service experiences.
             </p>
             
             <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-8">

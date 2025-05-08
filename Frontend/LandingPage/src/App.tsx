@@ -65,7 +65,7 @@ function LandingPageContent({ onLoginClick, onSignUpClick }: LandingPageContentP
       />
       
       {/* Main Content Sections */}
-      <div id="home"><Hero /></div>
+      <div id="home"><Hero onLoginClick={onLoginClick} /></div>
       <div id="about"><About /></div>
       <div id="services"><Services services={services} /></div> {/* Pass services here */}
       <Blog />
@@ -88,8 +88,8 @@ function App() {
               onLoginClick={() => setLoginOpen(true)} 
               onSignUpClick={() => setSignUpOpen(true)} 
             />
-            {isSignUpOpen && <SignUp onClose={() => setSignUpOpen(false)} />}
-            {isLoginOpen && <Login onClose={() => setLoginOpen(false)} />}
+            {isSignUpOpen && <SignUp onClose={() => setSignUpOpen(false)} onLoginClick={() => { setSignUpOpen(false); setLoginOpen(true); }} />}
+            {isLoginOpen && <Login onClose={() => setLoginOpen(false)} onSignUpClick={() => { setLoginOpen(false); setSignUpOpen(true); }} />}
           </>
         } 
       />

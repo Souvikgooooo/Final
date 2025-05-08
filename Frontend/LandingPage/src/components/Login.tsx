@@ -7,15 +7,15 @@ import { useUser } from '../context/UserContext'; // Import user context
 
 interface LoginProps {
   onClose: () => void;
+  onSignUpClick: () => void; // Added to switch to Sign Up modal
 }
 
-const Login: React.FC<LoginProps> = ({ onClose }) => {
+const Login: React.FC<LoginProps> = ({ onClose, onSignUpClick }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { setUser } = useUser(); // Get setUser function from context
 
-
-const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
 
   try {
@@ -74,7 +74,7 @@ const handleLogout = async () => {
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-lg shadow-xl p-8 w-full max-w-md space-y-6">
-        <h2 className="text-2xl font-semibold text-center text-emerald-600">Log In</h2>
+        <h2 className="text-3xl font-bold text-center text-primary">Log In</h2>
         
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
@@ -82,39 +82,42 @@ const handleLogout = async () => {
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-600"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
           />
           <input
             type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-600"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
           />
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-emerald-600 to-sky-600 text-white py-3 rounded-lg hover:from-emerald-700 hover:to-sky-700 transition-colors"
+            className="w-full bg-primary text-primary-foreground py-3 rounded-lg hover:bg-primary/90 transition-colors font-semibold"
           >
             Log In
           </button>
         </form>
 
-        <div className="flex items-center justify-between space-x-4">
-          <button
-            className="flex-1 bg-white text-gray-700 border border-gray-300 py-3 rounded-lg hover:bg-gray-100 transition-colors flex items-center justify-center space-x-2"
-          >
-            <FaGoogle className="w-5 h-5 text-gray-500" />
-            <span>Sign in with Google</span>
-          </button>
-        </div>
-
-        <div className="text-center">
+        <div className="text-center pt-2">
           <button
             onClick={() => alert('Forgot password functionality')}
-            className="text-sm text-emerald-600 hover:underline"
+            className="text-sm text-primary hover:underline"
           >
             Forgot Password?
           </button>
+        </div>
+        
+        <div className="mt-6 py-4 px-4 bg-secondary/50 rounded-lg border border-border">
+          <p className="text-center text-sm text-secondary-foreground">
+            Don't have an account yet?{' '}
+            <button
+              onClick={onSignUpClick}
+              className="font-semibold text-primary hover:underline"
+            >
+              Sign up here
+            </button>
+          </p>
         </div>
 
         <div className="text-center">

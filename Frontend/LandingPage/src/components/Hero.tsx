@@ -1,7 +1,11 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 
-const Hero = () => {
+interface HeroProps {
+  onLoginClick: () => void;
+}
+
+const Hero: React.FC<HeroProps> = ({ onLoginClick }) => {
   return (
     <div className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -14,7 +18,10 @@ const Hero = () => {
             <p className="mt-6 text-xl text-gray-600">
               Access all the services you need, all in one place - fast, easy, and hassle-free!
             </p>
-            <button className="mt-8 bg-emerald-500 text-white px-8 py-3 rounded-full hover:bg-emerald-600 transition-colors inline-flex items-center group">
+            <button 
+              className="mt-8 bg-primary text-primary-foreground px-8 py-3 rounded-full hover:bg-primary/90 transition-colors inline-flex items-center group"
+              onClick={onLoginClick}
+            >
               Get Started
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
